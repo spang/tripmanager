@@ -15,6 +15,7 @@ var models = require('./models');
 app.configure(function(){
   app.set('views', __dirname + '/views');
   app.set('view engine', 'jade');
+  app.set('view options', { layout: false });
   app.use(express.bodyParser());
   app.use(express.cookieParser());
   app.use(express.session({ secret: '0rC+Na99I0GPv7jNN3Xl7cHW6v2BR8rb' }));
@@ -69,7 +70,7 @@ app.post('/trip/new/done',
     else {
       // Or, use filtered data from the form object
       console.log("trip name:", req.form.trip_name);
-      console.log("trip description:", req.form.password);
+      console.log("trip description:", req.form.trip_description);
     }
   }
 );

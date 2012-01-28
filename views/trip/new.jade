@@ -1,56 +1,69 @@
-h2 Yeeehaw! We're making a new trip.
+extends ../layout
 
-//- TODO: make error-handling prettier and more useful
-if typeof flash != 'undefined'
-  if flash.error
-    #error= flash.error
-  if flash.info
-    #info= flash.info
+block scripts
+  script(type='text/javascript')
+    $(function(){
+      $('#trip_start').datepicker();
+      $('#trip_end').datepicker();
+      $('#signup_start').datepicker();
+      $('#signup_end').datepicker();
+    });
 
-form#trip-form(method='post', action='/trip/new/done')
-  p
-    label(for='trip_name') trip name:
-    label(for='trip_start') from
-    label(for='trip_end') to
-  p
-    input(type='text', name='trip_name', id='trip_name', size='30')
-    input(type='text', name='trip_start', id='trip_start', size='10')
-    input(type='text', name='trip_end', id='trip_end', size='10')
-  p
-    label(for='trip_description') description / other info:
-  p
-    textarea(name='trip_description', id='trip_description')
-  p
-    label(for='signup_start') sign up open from
-    input(type='text', name='signup_start', id='signup_start', size='10')
-    label(for='signup_end') to
-    input(type='text', name='signup_end', id='signup_end', size='10')
-  p
-    label(for='allow_early_drivers') allow some drivers to sign up early?
-    input(type='checkbox', name='allow_early_drivers', id='allow_early_drivers')
-  //- use some client-side js to hide this option if the above checkbox
-  //- is unchecked
-  p
-    | Ok!
-    input(type='text', name='num_early_drivers', id='num_early_drivers', size='1', value='2')
-    | driver(s) can sign up
-    input(type='text', name='early_signup_days', id='early_signup_days', size='1', value='1')
-    | day(s) early.
-  p
-    label(for='trip_fee') trip fee
-    input(type='text', name='trip_fee', id='trip_fee', size='2', value='$0')
+block content
+  h2 Yeeehaw! We're making a new trip.
 
-  h3 leader info (that's you, probably)
+  //- TODO: make error-handling prettier and more useful
+  if typeof flash != 'undefined'
+    if flash.error
+      #error= flash.error
+    if flash.info
+      #info= flash.info
 
-  p
-    label(for='leader_name') name:
-    input(type='text', name='leader_name', id='leader_name', size='20')
-  p
-    label(for='leader_email') email
-    input(type='text', name='leader_email', id='leader_email', size='20')
+  form#trip-form(method='post', action='/trip/new/done')
+    p
+      label(for='trip_name') trip name:
+    p
+      input(type='text', name='trip_name', id='trip_name', size='30')
+    p
+      label(for='trip_start') starts
+      input(type='text', name='trip_start', id='trip_start', size='10')
+      label(for='trip_end') ends
+      input(type='text', name='trip_end', id='trip_end', size='10')
+    p
+      label(for='trip_description') description / other info:
+    p
+      textarea(name='trip_description', id='trip_description', rows='10', cols='60')
+    p
+      label(for='signup_start') sign up open from
+      input(type='text', name='signup_start', id='signup_start', size='10')
+      label(for='signup_end') to
+      input(type='text', name='signup_end', id='signup_end', size='10')
+    p
+      label(for='allow_early_drivers') allow some drivers to sign up early?
+      input(type='checkbox', name='allow_early_drivers', id='allow_early_drivers')
+    //- use some client-side js to hide this option if the above checkbox
+    //- is unchecked
+    p
+      | Ok!
+      input(type='text', name='num_early_drivers', id='num_early_drivers', size='1', value='2')
+      | driver(s) can sign up
+      input(type='text', name='early_signup_days', id='early_signup_days', size='1', value='1')
+      | day(s) early.
+    p
+      label(for='trip_fee') trip fee
+      input(type='text', name='trip_fee', id='trip_fee', size='2', value='$0')
 
-  //- TODO: additional questions
-  //- TODO: leader signup info (car, answer extra questions yourself (in a new
-  //-       page)
+    h3 leader info (that's you, probably)
 
-  input(type='submit', value='Make it!')
+    p
+      label(for='leader_name') name
+      input(type='text', name='leader_name', id='leader_name', size='20')
+    p
+      label(for='leader_email') email
+      input(type='text', name='leader_email', id='leader_email', size='20')
+
+    //- TODO: additional questions
+    //- TODO: leader signup info (car, answer extra questions yourself (in a new
+    //-       page)
+
+    input(type='submit', value='Make it!')
