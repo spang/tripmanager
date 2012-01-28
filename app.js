@@ -4,11 +4,6 @@
  */
 
 var express = require('express');
-// var mongooseAuth = require("mongoose-auth");
-
-var everyauth = require('everyauth')
-  , Promise = everyauth.Promise;
-everyauth.debug = true;
 
 var models = require('./models');
 
@@ -21,7 +16,7 @@ app.configure(function(){
   app.set('view engine', 'jade');
   app.use(express.bodyParser());
   app.use(express.cookieParser());
-  app.use(express.session({ secret: 'ebi3Ial8poophoh$B1ju' }));
+  app.use(express.session({ secret: '0rC+Na99I0GPv7jNN3Xl7cHW6v2BR8rb' }));
   app.use(express.methodOverride());
   app.use(app.router);
   app.use(express.static(__dirname + '/public'));
@@ -39,17 +34,28 @@ app.configure('production', function(){
 
 app.get('/', function(req, res){
   res.render('index', {
-    title: 'Express'
+    locals: {
+      title: 'MITOC Trip Manager'
+    }
   });
 });
 
-app.get('/logout', function (req, res) {
-  req.logout();
-  res.redirect('/');
+app.get('/trip/new', function(req, res){
+  res.render('trip/new', {
+    locals: {
+      title: 'MITOC Trip Manager - Creating new trip'
+    }
+  });
 });
 
-models.mongooseAuth.helpExpress(app);
+app.get('/trip/join', function(req, res){
+  res.render('trip/join', {
+    locals: {
+      title: 'MITOC Trip Manager - Join a trip'
+    }
+  });
+});
 
 app.listen(3000);
-console.log("Express server listening on port %d in %s mode",
+console.log("Express server listening at http://localhost:%d/ in %s mode",
     app.address().port, app.settings.env);
