@@ -44,7 +44,8 @@ app.get('/', function(req, res){
 app.get('/trip/new', function(req, res){
   res.render('trip/new', {
     locals: {
-      title: 'MITOC Trip Manager - Creating new trip'
+      title: 'MITOC Trip Manager - Creating new trip',
+      flash: req.flash()
     }
   });
 });
@@ -60,8 +61,10 @@ app.post('/trip/new/done',
   // Express request-handler gets filtered and validated data
   function(req, res) {
     if (!req.form.isValid) {
-      // handle errors
       console.log(req.form.errors);
+      // re-render the form with errors highlighted
+      req.form.flashErrors();
+      res.redirect('/trip/new');
     }
     else {
       // Or, use filtered data from the form object

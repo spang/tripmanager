@@ -1,5 +1,12 @@
 h2 Yeeehaw! We're making a new trip.
 
+//- TODO: make error-handling prettier and more useful
+if typeof flash != 'undefined'
+  if flash.error
+    #error= flash.error
+  if flash.info
+    #info= flash.info
+
 form#trip-form(method='post', action='/trip/new/done')
   p
     label(for='trip_name') trip name:
