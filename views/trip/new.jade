@@ -1,6 +1,7 @@
 extends ../layout
 
 block scripts
+  script(type='text/javascript', src='/javascripts/tiny_mce/jquery.tinymce.js')
   script(type='text/javascript')
     $(document).ready(function(){
       $('#trip_start').datepicker();
@@ -12,6 +13,16 @@ block scripts
       $('#allow_early_drivers').click(function() {
         //- is the 'slow' bit too obnoxious?
         $('#drivers').toggle('slow');
+      });
+      $('textarea.richedit').tinymce({
+          script_url : '/javascripts/tiny_mce/tiny_mce.js',
+          theme : "advanced",
+          theme_advanced_buttons1 : 'bold,italic,underline,justifycenter,|,undo,redo,|,image,bullist,numlist,|,link,unlink,fontsizeselect',
+          theme_advanced_buttons2 : '',
+          theme_advanced_buttons3 : '',
+          theme_advanced_buttons4 : '',
+          theme_advanced_toolbar_location : "bottom",
+          theme_advanced_resizing : true,
       });
     });
 
@@ -38,7 +49,7 @@ block content
     p
       label(for='trip_description') description / other info:
     p
-      textarea(name='trip_description', id='trip_description', rows='10', cols='60')
+      textarea.richedit(name='trip_description', id='trip_description', rows='10', cols='60')
     p
       label(for='signup_start') sign up open from
       input(type='text', name='signup_start', id='signup_start', size='10')
