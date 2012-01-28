@@ -1,13 +1,14 @@
-
 /**
  * Module dependencies.
  */
 
-var express = require('express');
+var express = require('express'),
+    form = require('express-form'),
+    filter = form.filter,
+    validate = form.validate,
+    app = express.createServer();
 
 var models = require('./models');
-
-var app = module.exports = express.createServer();
 
 // Configuration
 
@@ -47,6 +48,29 @@ app.get('/trip/new', function(req, res){
     }
   });
 });
+
+app.post('/trip/new/done',
+  form( // form filter and validation middleware
+    filter("trip_name").trim(),
+    validate("trip_name").required(),
+    filter("trip_description").trim(),
+    validate("trip_description").required()
+  ),
+
+  // Express request-handler gets filtered and validated data
+  function(req, res) {
+    if (!req.form.isValid) {
+      // handle errors
+      console.log(req.form.errors);
+    }
+    else {
+      // Or, use filtered data from the form object
+      console.log("trip name:", req.form.trip_name);
+      console.log("trip description:", req.form.password);
+    }
+  }
+);
+
 
 app.get('/trip/join', function(req, res){
   res.render('trip/join', {
