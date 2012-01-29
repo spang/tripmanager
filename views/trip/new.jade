@@ -1,13 +1,15 @@
 extends ../layout
 
 block scripts
+  link(type='text/css', href="/stylesheets/jquery-ui-timepicker-addon.css", rel="stylesheet")
   script(type='text/javascript', src='/javascripts/tiny_mce/jquery.tinymce.js')
+  script(type='text/javascript', src='/javascripts/jquery-ui-timepicker-addon.js')
   script(type='text/javascript')
     $(document).ready(function(){
       $('#trip_start').datepicker();
       $('#trip_end').datepicker();
-      $('#signup_start').datepicker();
-      $('#signup_end').datepicker();
+      $('#signup_start').timepicker();
+      $('#signup_end').datetimepicker();
 
       $('#drivers').hide();
       $('#allow_early_drivers').click(function() {
@@ -52,9 +54,9 @@ block content
       textarea.richedit(name='trip_description', id='trip_description', rows='10', cols='60')
     p
       label(for='signup_start') sign up open from
-      input(type='text', name='signup_start', id='signup_start', size='10')
+      input(type='text', name='signup_start', id='signup_start', size='13')
       label(for='signup_end') to
-      input(type='text', name='signup_end', id='signup_end', size='10')
+      input(type='text', name='signup_end', id='signup_end', size='13')
     p
       label(for='allow_early_drivers') allow some drivers to sign up early?
       input(type='checkbox', name='allow_early_drivers', id='allow_early_drivers')
