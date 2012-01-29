@@ -1,11 +1,8 @@
-/**
- * Module dependencies.
- */
-
 var express = require('express'),
     form = require('express-form'),
     filter = form.filter,
     validate = form.validate,
+    sanitize = require('validator').sanitize,
     app = express.createServer();
 
 var models = require('./models');
@@ -71,6 +68,9 @@ app.post('/trip/new/done',
       // Or, use filtered data from the form object
       console.log("trip name:", req.form.trip_name);
       console.log("trip description:", req.form.trip_description);
+      // we're going to end up displaying this description on a
+      // web page, so we need to strip it of XSS attack vectors
+      var sanitized_description = sanitize(req.form.trip_description;
     }
   }
 );
