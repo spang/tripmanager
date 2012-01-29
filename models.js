@@ -1,67 +1,26 @@
 var mongoose = require("mongoose");
 
-var Schema = mongoose.Schema
-  , ObjectId = Schema.ObjectId;
+var Schema = mongoose.Schema,
+    ObjectId = Schema.ObjectId;
 
-// var UserSchema = new Schema({})
-//   , User;
+var Person = new Schema({
+    name        : String,
+    email       : String,
+    leader      : Boolean,
+    leader_type : String,   // null/empty if they're not a leader
+});
 
-// var mongooseAuth = require("mongoose-auth");
-// var everyauth = require('everyauth')
-//   , Promise = everyauth.Promise;
-
-// var conf = require('./conf');
-
-// everyauth.debug = true;
-
-// UserSchema.plugin(mongooseAuth, {
-//     everymodule: {
-//       everyauth: {
-//           User: function () {
-//             return User;
-//           }
-//       }
-//     }
-//   , facebook: {
-//       everyauth: {
-//           myHostname: 'http://localhost:3000'
-//         , appId: conf.fb.appId
-//         , appSecret: conf.fb.appSecret
-//         , redirectPath: '/'
-//       }
-//     }
-//   , twitter: {
-//       everyauth: {
-//           myHostname: 'http://localhost:3000'
-//         , consumerKey: conf.twit.consumerKey
-//         , consumerSecret: conf.twit.consumerSecret
-//         , redirectPath: '/'
-//       }
-//     }
-//   , password: {
-//         loginWith: 'email'
-//       , extraParams: {
-//             phone: String
-//           , name: {
-//                 first: String
-//               , last: String
-//             }
-//         }
-//       , everyauth: {
-//             getLoginPath: '/login'
-//           , postLoginPath: '/login'
-//           , loginView: 'login.jade'
-//           , getRegisterPath: '/register'
-//           , postRegisterPath: '/register'
-//           , loginSuccessRedirect: '/'
-//           , registerSuccessRedirect: '/'
-//         }
-//     }
-// });
+var Trip = new Schema({
+    name        : String,
+    start_date  : Date,
+    end_date    : Date,
+    description : String,
+    signup_start: String, // no datetime type?
+    signup_end  : String, // no datetime type?
+    early_drivers: Number, // can be 0
+    early_signup_start : String, // no datetime type? can be undef
+    trip_fee    : Number,
+    leader      : Person,
+});
 
 mongoose.connect('mongodb://localhost/tripmanager');
-
-// User = mongoose.model('User', UserSchema);
-
-// exports
-// exports.mongooseAuth = mongooseAuth;
