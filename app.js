@@ -69,7 +69,7 @@ function render_new_trip_form(req, res) {
 
 function find_or_create_leader_object(name, email, callback) {
   console.log('called find_or_create_leader_object');
-  var leader = models.Person.find({ email: email, leader: true },
+  return models.Person.find({ email: email, leader: true },
       function(err, candidates) {
         var leader;
         console.log('processing candidates');
@@ -90,21 +90,23 @@ function find_or_create_leader_object(name, email, callback) {
             leader.save(function(err) {
               if (!err) {
                 console.log('new leader saved');
+                console.log('returning leader', leader.id);
+                return callback(leader);
               }
               else {
                 console.log('error while saving leader!', err);
+                // XXX do something intelligent for error-handling
+                return;
               }
             });
           }
-          else {
-            console.log('query error in find_or_create_leader_object: ', error);
-            // XXX crash hard? do something intelligent.
-          }
         }
-      console.log('returning leader', leader.id);
-      return leader;
+        else {
+          console.log('query error in find_or_create_leader_object: ', error);
+          // XXX crash hard? do something intelligent.
+          return;
+        }
       });
-  return callback(leader);
 }
 
 function process_new_trip(req, res) {
@@ -124,9 +126,10 @@ function process_new_trip(req, res) {
     // web page, so we need to strip it of XSS attack vectors
     var sanitized_description = sanitize(req.form.trip_description);
 
-    var leader = find_or_create_leader_object(req.form.leader_name,
+    find_or_create_leader_object(req.form.leader_name,
                                               req.form.leader_email,
                                               function(leader) {
+      console.log('our leader is', leader.name, leader.email);
       var new_trip = new models.Trip({
         leader      : leader.id,
         name        : req.form.trip_name,
@@ -140,12 +143,16 @@ function process_new_trip(req, res) {
         fee           : req.form.trip_fee,
       });
       new_trip.save(function(err) {
-        // note that saving is asynchronous
         if (!err) {
           console.log('new trip saved');
         }
         else {
           console.log('error!', err);
+        }
+      });
+      res.render('trip/new/done', {
+        locals: {
+          title: 'Trip created',
         }
       });
     });
