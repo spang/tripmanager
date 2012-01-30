@@ -47,7 +47,20 @@ app.post('/trip/new/done',
     validate("trip_name").required(),
     filter("trip_description").trim(),
     validate("trip_description").required(),
-    // TODO: add more validators
+    // TODO: make validators actually validate
+    filter("trip_start").trim(),
+    validate("trip_start").required(),
+    filter("trip_end").trim(),
+    validate("trip_end").required(),
+    filter("signup_start").trim(),
+    validate("signup_start").required(),
+    filter("signup_end").trim(),
+    validate("signup_end").required(),
+    filter("allow_early_drivers").trim(),
+    filter("num_early_drivers").trim(),
+    filter("early_signup_days").trim(),
+    filter("trip_fee").trim().ltrim('$'),
+    validate("trip_fee").required().isInt(),
     filter("leader_name").trim(),
     validate("leader_name").required(),
     filter("leader_email").trim(),
@@ -124,22 +137,23 @@ function process_new_trip(req, res) {
     console.log("trip description:", req.form.trip_description);
     // we're going to end up displaying this description on a
     // web page, so we need to strip it of XSS attack vectors
-    var sanitized_description = sanitize(req.form.trip_description);
+    var sanitized_description = sanitize(req.form.trip_description).xss();
 
     find_or_create_leader_object(req.form.leader_name,
                                               req.form.leader_email,
                                               function(leader) {
-      console.log('our leader is', leader.name, leader.email);
+      console.log('trip start:', req.form.trip_start);
       var new_trip = new models.Trip({
         leader      : leader.id,
         name        : req.form.trip_name,
         description : sanitized_description,
-        start_date  : req.form.start_date,
-        end_date    : req.form.end_date,
+        start_date  : req.form.trip_start,
+        end_date    : req.form.trip_end,
         signup_start  : req.form.signup_start,
         signup_end    : req.form.signup_end,
-        early_drivers : req.form.early_drivers,
-        early_signup_start : req.form.early_signup_start,
+        early_drivers : req.form.num_early_drivers,
+        // this needs to be calculated as signup_start - early_signup_days
+        // early_signup_start : req.form.early_signup_start,
         fee           : req.form.trip_fee,
       });
       new_trip.save(function(err) {
