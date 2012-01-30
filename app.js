@@ -163,7 +163,7 @@ function process_new_trip(req, res) {
           console.log('new trip saved');
         }
         else {
-          console.log('error!', err);
+          console.log('error saving new trip!', err);
         }
       });
       res.render('trip/new/done', {
