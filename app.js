@@ -151,11 +151,13 @@ function process_new_trip(req, res) {
         end_date    : req.form.trip_end,
         signup_start  : req.form.signup_start,
         signup_end    : req.form.signup_end,
-        early_drivers : req.form.num_early_drivers,
         // this needs to be calculated as signup_start - early_signup_days
         // early_signup_start : req.form.early_signup_start,
         fee           : req.form.trip_fee,
       });
+      if (req.form.allow_early_drivers) {
+        new_trip.early_drivers = req.form.num_early_drivers;
+      }
       new_trip.save(function(err) {
         if (!err) {
           console.log('new trip saved');
