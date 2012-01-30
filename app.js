@@ -67,10 +67,12 @@ function render_new_trip_form(req, res) {
   });
 }
 
-function find_or_create_leader_object(name, email) {
-  return models.Person.find({ email: email, leader: true },
+function find_or_create_leader_object(name, email, callback) {
+  console.log('called find_or_create_leader_object');
+  var leader = models.Person.find({ email: email, leader: true },
       function(err, candidates) {
         var leader;
+        console.log('processing candidates');
         if (!err) {
           for (var candidate in candidates) {
             if (name==candidate.name) {
@@ -78,12 +80,31 @@ function find_or_create_leader_object(name, email) {
               leader = candidate;
             }
           }
-          return leader;
+          if (!leader) {
+            console.log('creating new leader');
+            leader = new models.Person({
+                  leader: true,
+                  name  : name,
+                  email : email,
+            });
+            leader.save(function(err) {
+              if (!err) {
+                console.log('new leader saved');
+              }
+              else {
+                console.log('error while saving leader!', err);
+              }
+            });
+          }
+          else {
+            console.log('query error in find_or_create_leader_object: ', error);
+            // XXX crash hard? do something intelligent.
+          }
         }
-        else {
-          console.log('query error in find_or_create_leader_object: ', error);
-        }
+      console.log('returning leader', leader.id);
+      return leader;
       });
+  return callback(leader);
 }
 
 function process_new_trip(req, res) {
@@ -96,7 +117,7 @@ function process_new_trip(req, res) {
   }
   else {
     // save filtered trip data & render finished page
-    // for now, assume validation
+    // for now, assume validation has already happened
     console.log("trip name:", req.form.trip_name);
     console.log("trip description:", req.form.trip_description);
     // we're going to end up displaying this description on a
