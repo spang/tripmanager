@@ -23,10 +23,18 @@ var TripSchema = new Schema({
     leader      : ObjectId, // Person, dunno if I'm doing this right
 });
 
+var QuestionSchema = new Schema({
+    question    : String,
+    answer_type : String,
+    is_stock    : Boolean,
+});
+
 var Person = mongoose.model('Person', PersonSchema);
 var Trip = mongoose.model('Trip', TripSchema);
+var Question = mongoose.model('Question', QuestionSchema);
 
 mongoose.connect('mongodb://localhost/tripmanager');
 
 exports.Person = Person;
 exports.Trip = Trip;
+exports.QUestion = Question;
