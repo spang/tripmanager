@@ -26,7 +26,10 @@ var TripSchema = new Schema({
 var QuestionSchema = new Schema({
     question    : String,
     answer_type : String,
-    is_stock    : Boolean,
+    is_stock    : {
+        type: Boolean,
+        default: false,
+    },
 });
 
 var ChoiceSchema = new Schema({
