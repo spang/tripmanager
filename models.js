@@ -29,12 +29,19 @@ var QuestionSchema = new Schema({
     is_stock    : Boolean,
 });
 
+var ChoiceSchema = new Schema({
+    question_id : ObjectId,
+    description : String,
+});
+
 var Person = mongoose.model('Person', PersonSchema);
 var Trip = mongoose.model('Trip', TripSchema);
 var Question = mongoose.model('Question', QuestionSchema);
+var Choice = mongoose.model('Choice', ChoiceSchema);
 
 mongoose.connect('mongodb://localhost/tripmanager');
 
 exports.Person = Person;
 exports.Trip = Trip;
 exports.QUestion = Question;
+exports.Choice = Choice;
