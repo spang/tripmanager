@@ -72,12 +72,17 @@ app.get('/trip/join/:id', render_join_trip_form);
 
 // handlers
 function render_new_trip_form(req, res) {
-  res.render('trip/new', {
-    locals: {
-      title: 'MITOC Trip Manager - Creating new trip',
-      flash: req.flash()
-    }
-  });
+  models.Question.find({ is_stock : true },
+      function(err, stock_questions) {
+        res.render('trip/new', {
+          locals: {
+            title: 'MITOC Trip Manager - Creating new trip',
+            stock_questions: stock_questions,
+            flash: req.flash(),
+          }
+        });
+      }
+    );
 }
 
 function find_or_create_leader_object(name, email, callback) {

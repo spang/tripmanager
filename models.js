@@ -41,4 +41,4 @@ mongoose.connect('mongodb://localhost/tripmanager');
 
 exports.Person = Person;
 exports.Trip = Trip;
-exports.QUestion = Question;
+exports.Question = Question;
