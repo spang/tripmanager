@@ -21,6 +21,14 @@ var initial_questions = [ {
         // XXX what happens if we're messy with this?
         // null vs empty array
         // "choices"       : [],
+    }, {
+    // this "blank question" makes it much easier for us to
+    // write the question display logic, because we can just
+    // loop through and have a default "new question" with
+    // type dropdown if no type is given
+        "question"       : "",
+        "answer_type"    : "",
+        "is_stock"       : true,
     },
 ];
 

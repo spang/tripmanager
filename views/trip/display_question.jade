@@ -1,0 +1,45 @@
+//- always passed the variable 'question'; this file will display
+//- the question properly based on its type
+
+//- calculate the 'name' for this input in the form
+//- the strategy here is that usually the 
+//- XXX TODO: we really ought to have some sort of whole-form
+//-           check that makes sure we don't have any colliding
+//-           input names. but this is unlikely enough to happen
+//-           that we can ignore it for now, because it's not
+//-           a trivial problem to solve.
+//- XXX I suspect we're going to have to move the code that
+//-     calculates this into the node code so we can use it
+//-     in the views, but we'll cross that bridge when we come
+//-     to it.
+- var name = question.question.split(' ').slice(-2).join('_') + '_v'
+
+tr
+  //- XXX TODO also print [+/-] buttons to add/remove questions
+if question.answer_type == "Boolean"
+  td #{question.question}
+  td
+    input(type="checkbox", name=name, checked=question.is_checked)
+else if (question.answer_type == "String")
+  td #{question.question}
+  td
+    input(type="text", name=name, value="")
+else if question.answer_type == "Choice"
+  td #{question.question}
+  td
+    select(name=name)
+      each item in question.choices
+        option(value=item)= item
+        //- XXX TODO deal properly with 'other' (display text field)
+else
+  td
+    input(type="text", name="new_question1_question", value="new question")
+  td
+    select(name="new_question1_type")
+      option(value="String") free-form (text box)
+      option(value="Choice") choice (drop-down)
+      option(value="Boolean") yes/no (checkbox)
+      //- XXX TODO special cases to deal with if the leader selects 'choice'
+      //- (text field to specify the choices) and if she picks "boolean"
+      //- (checkbox saying whether or not this answer is checked by
+      //- default)
