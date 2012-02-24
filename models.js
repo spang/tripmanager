@@ -30,6 +30,10 @@ var QuestionSchema = new Schema({
         type: Boolean,
         default: false,
     },
+    is_checked  : {
+        type: Boolean,
+        default: false,
+    },
     choices     : [String],
 });
 
