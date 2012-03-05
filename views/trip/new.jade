@@ -13,8 +13,7 @@ block scripts
 
       $('#drivers').hide();
       $('#allow_early_drivers').click(function() {
-        //- is the 'slow' bit too obnoxious?
-        $('#drivers').toggle('slow');
+        $('#drivers').toggle('fast');
       });
       $('textarea.richedit').tinymce({
           script_url : '/javascripts/tiny_mce/tiny_mce.js',
