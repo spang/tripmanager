@@ -2,8 +2,10 @@ extends ../layout
 
 block scripts
   link(type='text/css', href="/stylesheets/jquery-ui-timepicker-addon.css", rel="stylesheet")
+  script(type='text/javascript', src='http://maps.googleapis.com/maps/api/js?key=AIzaSyD6dqRiTLYdVLFbVy2uVQANM6nUxU5-NSw&sensor=false')
   script(type='text/javascript', src='/javascripts/tiny_mce/jquery.tinymce.js')
   script(type='text/javascript', src='/javascripts/jquery-ui-timepicker-addon.js')
+  script(type='text/javascript', src='/javascripts/jquery.ui.map.min.js')
   script(type='text/javascript')
     $(document).ready(function(){
       $('#trip_start').datepicker();
@@ -25,7 +27,37 @@ block scripts
           theme_advanced_toolbar_location : "bottom",
           theme_advanced_resizing : true,
       });
+      var mitLatLng = new google.maps.LatLng(42.359057, -71.093571);
+      $('#map_canvas').gmap({
+          'center'    : mitLatLng,
+          'zoom'      : 15,
+          'mapTypeId' : google.maps.MapTypeId.ROADMAP,
+      });
+      var geocoder = new google.maps.Geocoder();
+      $('#map_canvas_button').click(function() {
+        var address = $('#trip_location').val().replace(/^\s+|\s+$/g, ''); // whitespace trimmed
+        if ( address ) {
+          geocoder.geocode( { 'address': address }, function(results, status) {
+            if (status == google.maps.GeocoderStatus.OK) {
+              $('#map_canvas').gmap('option', 'center', results[0].geometry.location);
+              $('#map_canvas').gmap('addMarker', {
+                'position': $('#map_canvas').gmap('option', 'center'),
+                bounds: true,
+              });
+              // XXX TODO: remove old marker?
+            } else {
+              alert("Geocode was not successful for the following reason: " + status);
+            }
+            $('#map_canvas').gmap('option', 'zoom', 9);
+          });
+        }
+      });
     });
+  style(type="text/css")
+    #map_canvas {
+      width: 600px;
+      height:500px;
+    }
 
 block content
   h2 Yeeehaw! We're making a new trip.
@@ -51,6 +83,11 @@ block content
       label(for='trip_description') description / other info:
     p
       textarea.richedit(name='trip_description', id='trip_description', rows='30', cols='80')
+    p
+      label(for='map_location') trip location (coordinates or name):
+      input(type='text', name='trip_location', id='trip_location', size=10)
+      button#map_canvas_button(type="button") update map
+      div#map_canvas
     p
       label(for='signup_start') sign up open from
       input(type='text', name='signup_start', id='signup_start', size='13')
